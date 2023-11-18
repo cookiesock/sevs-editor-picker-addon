@@ -1,8 +1,6 @@
 import flixel.effects.FlxFlicker;
 import funkin.editors.ui.UIState;
-import funkin.backend.scripting.ScriptPack;
 import funkin.backend.scripting.Script;
-import funkin.backend.scripting.DummyScript;
 
 var editors:Array<String> = [];
 
@@ -28,10 +26,24 @@ function postCreate() {
         sprites[dumbIndex].remove(stupidShit);
     
         stupidShit = new FlxSprite();
-        stupidShit.loadGraphic(Paths.file('data/states/editors/' + i + '/icon.png'));
+        stupidShit.loadGraphic(Paths.file('data/states/editors/' + i + '/icon.png'), true, 128, 128);
+
+        var frames = [];
+        var stupidFrame:Int = 0;
+
+        for (i in 0...(stupidShit.graphic.width / 128)) {
+            frames.push(stupidFrame);
+            stupidFrame ++;
+        }
+
+        stupidShit.animation.add('icon', frames, 24, true);
+        stupidShit.animation.play('icon', true);
+
         stupidShit.antialiasing = true;
-        stupidShit.setGraphicSize(128, 128);
-        stupidShit.updateHitbox();
+        if (sprites[dumbIndex].height < 150) {
+			stupidShit.scale.set(sprites[dumbIndex].height / 150, sprites[dumbIndex].height / 150);
+			stupidShit.updateHitbox();
+		}
         stupidShit.x = 25 + ((sprites[dumbIndex].height - stupidShit.width) / 2);
         stupidShit.y = (sprites[dumbIndex].height - stupidShit.height) / 2;
     
@@ -54,6 +66,7 @@ function update() {
         if (curSelected == dumbIndex && selected && FlxFlicker.isFlickering(sprites[dumbIndex].label)) {
             FlxFlicker._boundObjects[sprites[dumbIndex].label].completionCallback = function(flick) {
                 subCam.fade(0xFF000000, 0.25, false, function() {
+                    Script.staticVariables.set('currentEditor', i);
                     FlxG.switchState(new UIState(true, 'editors/' + i + '/state'));
                 });
             }

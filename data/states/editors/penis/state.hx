@@ -6,9 +6,6 @@ function create() {
     add(bg);
 
     var text = new UIText(0, 0, 0, 'penis', 48);
-    text.color = 0xFF000000;
-    text.borderColor = 0xFFFFFFFF;
-    text.borderSize = 1;
     text.screenCenter();
     add(text);
 }
