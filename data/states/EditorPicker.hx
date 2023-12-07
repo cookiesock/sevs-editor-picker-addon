@@ -27,6 +27,7 @@ function postCreate() {
     
         stupidShit = new FlxSprite();
         stupidShit.loadGraphic(Paths.file('data/states/editors/' + i + '/icon.png'), true, 128, 128);
+		stupidShit.antialiasing = true;
 
         var frames = [];
         var stupidFrame:Int = 0;
